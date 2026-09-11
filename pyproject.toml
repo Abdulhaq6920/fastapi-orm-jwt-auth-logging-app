@@ -1,0 +1,19 @@
+[project]
+name = "orm-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "cryptography>=50.0.1",
+    "datetime>=6.0",
+    "fastapi>=0.141.1",
+    "psycopg[binary]>=3.3.5",
+    "pyjwt>=2.13.0",
+    "python-dotenv>=1.2.3",
+    "requests>=2.34.2",
+    "sqlalchemy>=2.0.52",
+    "streamlit>=1.63.0",
+    "uvicorn>=0.52.4",
+]

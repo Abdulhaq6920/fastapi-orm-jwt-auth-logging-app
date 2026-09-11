@@ -33,28 +33,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Before JWT implementation. 
-
-"""@app.post("/login", response_model=UserResponse)
-async def login(
-    user_data: UserLogin,
-    db: AsyncSession = Depends(get_db)
-):
-    user = await crud.authenticate_user(
-        db,
-        user_data.email,
-        user_data.password
-    )
-
-    if not user:
-        raise HTTPException(
-            status_code=401, 
-            detail="Invalid email or password"
-        )
-
-    return user"""
-# ===================================================
-
 
 @app.post("/login")
 async def login(

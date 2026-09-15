@@ -30,9 +30,9 @@ def create_access_token(user_id: int):
     payload = {
         "sub": str(user_id),
         "iat": now,
-        "exp": now + timedelta(minutes=30),
-        "iss": "fastapi-auth",
-        "aud": "user-api"
+        "exp": now + timedelta(minutes=15),
+        "iss": [os.getenv("issuer")],
+        "aud": os.getenv("audience")
     }
 
     token = jwt.encode(
@@ -49,8 +49,8 @@ def verify_access_token(token: str):
             token,
             PUBLIC_KEY,
             algorithms=[ALGORITHM],
-            audience="user-api",
-            issuer="fastapi-auth"
+            audience=os.getenv("audience"),
+            issuer= os.getenv("issuer")
         )
         return payload
 

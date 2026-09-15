@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 import logging
 from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .database import Base, engine, get_db
@@ -176,3 +178,61 @@ async def delete_user(
     return {
         "message": "User deleted successfully"
     }
+
+SOURCE_FILE = Path("logs/app.log")
+OUTPUT_FILE = Path("downloads/app-log-copy.log")
+
+@app.post("/download_logs")
+async def generate_file():
+
+    try:
+        if not SOURCE_FILE.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="Log file not found"
+            )
+
+        data = SOURCE_FILE.read_text(encoding="utf-8")
+        logger.info(
+            "log_file_read",
+            extra={
+                "source_file": str(SOURCE_FILE),
+                "size_bytes": len(data.encode("utf-8"))
+    }
+)
+        OUTPUT_FILE.parent.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+        OUTPUT_FILE.write_text(
+            data,
+            encoding="utf-8"
+        )
+        logger.info(
+            "log_file_written",
+            extra={
+                "output_file": str(OUTPUT_FILE),
+                "size_bytes": len(data.encode("utf-8"))
+    }
+)
+        return FileResponse(
+            OUTPUT_FILE,
+            filename="app-log-copy.log"
+        )
+
+    except HTTPException:
+        raise
+
+    except Exception:
+        logger.exception(
+            "log_file_operation_failed",
+            extra={
+                "source_file": str(SOURCE_FILE),
+                "output_file": str(OUTPUT_FILE)
+    }
+)
+
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to process log file"
+        )

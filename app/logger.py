@@ -40,6 +40,7 @@ class StructuredFormatter(logging.Formatter):
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),
+            "line":record.lineno,
         }
 
         for key, value in record.__dict__.items():

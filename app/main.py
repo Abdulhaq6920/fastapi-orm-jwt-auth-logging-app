@@ -183,38 +183,22 @@ SOURCE_FILE = Path("logs/app.log")
 OUTPUT_FILE = Path("downloads/app-log-copy.log")
 
 @app.post("/download_logs")
-async def download_log():
+async def generate_file():
 
     try:
-        if not SOURCE_FILE.exists():
-            raise HTTPException(
-                status_code=404,
-                detail="Log file not found"
-            )
 
-        data = SOURCE_FILE.read_text(encoding="utf-8")
-        logger.info(
-            "log_file_read",
-            extra={
-                "source_file": str(SOURCE_FILE),
-                "size_bytes": len(data.encode("utf-8"))
-    }
-)
+        with open(SOURCE_FILE,'r') as file:
+            data = file.read()
+
+
         OUTPUT_FILE.parent.mkdir(
             parents=True,
             exist_ok=True
         )
-        OUTPUT_FILE.write_text(
-            data,
-            encoding="utf-8"
-        )
-        logger.info(
-            "log_file_written",
-            extra={
-                "output_file": str(OUTPUT_FILE),
-                "size_bytes": len(data.encode("utf-8"))
-    }
-)
+        with open(OUTPUT_FILE, "w") as file:
+            file.write(data)
+
+
         return FileResponse(
             OUTPUT_FILE,
             filename="app-log-copy.log"
@@ -222,17 +206,3 @@ async def download_log():
 
     except HTTPException:
         raise
-
-    except Exception:
-        logger.exception(
-            "log_file_operation_failed",
-            extra={
-                "source_file": str(SOURCE_FILE),
-                "output_file": str(OUTPUT_FILE)
-    }
-)
-
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to process log file"
-        )

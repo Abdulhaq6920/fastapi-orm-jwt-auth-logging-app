@@ -183,7 +183,7 @@ SOURCE_FILE = Path("logs/app.log")
 OUTPUT_FILE = Path("downloads/app-log-copy.log")
 
 @app.post("/download_logs")
-async def generate_file():
+async def download_log():
 
     try:
         if not SOURCE_FILE.exists():

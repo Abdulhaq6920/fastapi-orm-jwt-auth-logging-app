@@ -59,6 +59,10 @@ def verify_access_token(token: str):
 
         return None
 
+    except jwt.InvalidIssuerError:
+        print("JWT ERROR: INVALID ISSUER")
+        return None
+
     except jwt.InvalidTokenError as e:
         print("JWT ERROR:", e)
 

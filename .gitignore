@@ -16,4 +16,4 @@ public_key.pem
 #environment variables
 .env
 logs/app.log
-output/app-logcopy.log
+downloads/app-logcopy.log

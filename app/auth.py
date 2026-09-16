@@ -31,7 +31,7 @@ def create_access_token(user_id: int):
         "sub": str(user_id),
         "iat": now,
         "exp": now + timedelta(minutes=15),
-        "iss": [os.getenv("issuer")],
+        "iss": os.getenv("issuer"),
         "aud": os.getenv("audience")
     }
 
